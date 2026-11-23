@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEQU6 - Pendidikan Pancasila</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Baloo 2', cursive;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Pastel light background */
+            background-color: #fdf2f8;
+            background-image: radial-gradient(#fbcfe8 2px, transparent 2px);
+            background-size: 30px 30px;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        h1, h2, h3, .font-heading {
+            font-family: 'Fredoka One', cursive;
+        }
+        
+        /* 3D Button Styles */
+        .btn-3d {
+            transition: all 0.1s;
+            position: relative;
+            top: 0;
+        }
+        .btn-3d:active, .btn-3d.active-press {
+            top: 4px;
+            box-shadow: none !important;
+            transform: translateY(2px);
+        }
+
+        /* Floating Animations for Ornaments */
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-5deg); }
+        }
+        .ornament-1 { animation: float1 4s ease-in-out infinite; }
+        .ornament-2 { animation: float2 5s ease-in-out infinite; }
+
+        /* Pop/Feedback Animation */
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop { animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Level Up Animation */
+        @keyframes levelUpAnim {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.1); filter: brightness(1.5); box-shadow: 0 0 20px #fbbf24; }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .animate-levelup { animation: levelUpAnim 1s ease-out; }
+
+        /* Leaderboard slide animation */
+        .slide-up { animation: slideUp 0.5s ease-out forwards; }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hide { display: none !important; }
+        
+        /* Quiz Button Shapes */
+        .shape-triangle { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 25px solid white; }
+        .shape-diamond { width: 20px; height: 20px; background-color: white; transform: rotate(45deg); }
+        .shape-circle { width: 25px; height: 25px; background-color: white; border-radius: 50%; }
+        .shape-square { width: 22px; height: 22px; background-color: white; border-radius: 4px; }
+
+        /* Speech Bubble */
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: .4em;
+            border: 3px solid #cbd5e1;
+        }
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            border-top-color: #ffffff;
+            border-bottom: 0;
+            border-left: 0;
+            margin-left: -7.5px;
+            margin-bottom: -15px;
+        }
+        .speech-bubble:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 18px solid transparent;
+            border-top-color: #cbd5e1;
+            border-bottom: 0;
+            border-left: 0;
+            margin-left: -9px;
+            margin-bottom: -18px;
+        }
+
+        /* Progress Bar */
+        .xp-bar-container { background-color: #e2e8f0; border-radius: 9999px; overflow: hidden; height: 12px; width: 100%; }
+        .xp-bar-fill { background-color: #fbbf24; height: 100%; width: 0%; transition: width 0.5s ease-out; }
+    </style>
+</head>
+<body class="text-gray-800 relative">
+
+    <!-- Background Ornaments (Pastel SD Theme) -->
+    <div class="fixed top-10 left-10 text-6xl text-blue-200 opacity-60 ornament-1 z-0"><i class="fa-solid fa-cloud"></i></div>
+    <div class="fixed top-40 right-20 text-5xl text-yellow-300 opacity-80 ornament-2 z-0"><i class="fa-solid fa-star"></i></div>
+    <div class="fixed bottom-20 left-10 text-5xl text-pink-300 opacity-70 ornament-2 z-0"><i class="fa-solid fa-pencil"></i></div>
+    <div class="fixed bottom-32 right-10 text-6xl text-green-200 opacity-60 ornament-1 z-0"><i class="fa-solid fa-tree"></i></div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 flex items-center justify-center min-h-screen p-2 md:p-4">
+        
+        <!-- App Box -->
+        <div class="bg-white/95 backdrop-blur-sm shadow-2xl rounded-3xl w-full max-w-3xl overflow-hidden border-4 border-pink-200 flex flex-col">
+            
+            <!-- SECTION 1: LANDING PAGE -->
+            <div id="screen-landing" class="p-8 flex flex-col items-center text-center">
+                <div class="bg-yellow-300 px-6 py-2 rounded-full mb-4 shadow-sm border-2 border-yellow-400 font-bold text-yellow-800 flex items-center gap-2">
+                    <i class="fa-solid fa-school"></i> SDN 124 Mataram
+                </div>
+                <h1 class="text-5xl md:text-6xl text-pink-500 font-heading mb-2 drop-shadow-md tracking-wide">GAMEQU6</h1>
+                <h2 class="text-xl md:text-2xl text-indigo-500 font-bold mb-1">Bahasa Indonesia - Kelas 6</h2>
+                <p class="text-gray-500 mb-6 font-semibold">Guru: Bapak Mahsar Haswadi</p>
+                
+                <div class="bg-indigo-50 p-4 rounded-xl border-2 border-indigo-100 mb-6 w-full max-w-md shadow-sm">
+                    <p class="text-sm text-indigo-800"><b>Materi:</b> Anak-Anak yang Mengubah Dunia (Teks Eksplanasi & Lingkungan).</p>
+                </div>
+
+                <div class="w-full max-w-sm mb-6 relative">
+                    <i class="fa-solid fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-300 text-xl"></i>
+                    <input type="text" id="player-name" placeholder="Masukkan Nama Kamu..." class="w-full pl-12 pr-5 py-4 rounded-2xl border-4 border-purple-200 text-lg font-bold focus:outline-none focus:border-purple-400 transition-colors shadow-inner" autocomplete="off">
+                </div>
+                
+                <button onclick="goToAvatar()" class="btn-3d bg-green-400 hover:bg-green-500 text-white text-2xl font-heading py-4 px-12 rounded-full shadow-[0_6px_0_#22c55e] w-full max-w-sm flex items-center justify-center gap-3">
+                    Let's Go! <i class="fa-solid fa-rocket"></i>
+                </button>
+            </div>
+
+            <!-- SECTION 2: AVATAR & STORY -->
+            <div id="screen-avatar" class="hide p-6 md:p-8 flex flex-col items-center text-center">
+                <!-- NPC Story Intro -->
+                <div class="flex flex-col items-center mb-6">
+                    <div class="speech-bubble p-4 mb-4 text-sm font-semibold text-gray-700 shadow-md">
+                        "Halo! Aku <b>Buni Kelinci si Penjaga Bumi</b>. Bumi kita sedang kepanasan! Yuk bantu aku menyusun <b>Teks Eksplanasi</b> agar kita bisa menyelamatkan dunia bersama!"
+                    </div>
+                    <div class="text-6xl animate-bounce">🐰</div>
+                </div>
+
+                <h2 class="text-2xl text-purple-600 font-heading mb-4">Pilih Karakter Pahlawanmu!</h2>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-3 mb-8" id="avatar-container">
+                    <!-- Avatars injected via JS -->
+                </div>
+                <button onclick="startGame()" class="btn-3d bg-pink-400 hover:bg-pink-500 text-white text-xl font-heading py-3 px-10 rounded-full shadow-[0_5px_0_#ec4899] w-full max-w-sm flex items-center justify-center gap-3">
+                    Mulai Petualangan <i class="fa-solid fa-play"></i>
+                </button>
+            </div>
+
+            <!-- SECTION 3: GAMEPLAY (HUD & QUIZ) -->
+            <div id="screen-game" class="hide flex flex-col h-full">
+                <!-- Gamified HUD (Heads Up Display) -->
+                <div id="hud" class="bg-indigo-600 p-3 flex flex-col gap-2 text-white shadow-md">
+                    <!-- Top Row: Player Info & Currency -->
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <div id="game-avatar-display" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl shadow-inner border-2 border-indigo-300">🐶</div>
+                            <div>
+                                <div id="game-name-display" class="font-bold leading-tight text-sm">Nama</div>
+                                <div class="text-xs text-indigo-200">Lvl <span id="game-level">1</span></div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="bg-indigo-800/50 px-3 py-1 rounded-full flex items-center gap-2 border border-indigo-400">
+                                <i class="fa-solid fa-coins text-yellow-300"></i>
+                                <span id="game-coins" class="font-bold text-sm">0</span>
+                            </div>
+                            <div class="bg-indigo-800/50 px-3 py-1 rounded-full flex items-center gap-2 border border-indigo-400">
+                                <i class="fa-solid fa-star text-orange-400"></i>
+                                <span id="game-xp" class="font-bold text-sm">0 XP</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bottom Row: XP Bar & Progress -->
+                    <div class="flex items-center gap-2">
+                        <div class="text-xs font-bold w-10">XP</div>
+                        <div class="xp-bar-container">
+                            <div id="xp-bar" class="xp-bar-fill"></div>
+                        </div>
+                        <div class="text-xs font-bold whitespace-nowrap w-16 text-right">Soal <span id="q-current">1</span>/<span id="q-total">20</span></div>
+                    </div>
+                </div>
+
+                <!-- NPC Guide Area & Search -->
+                <div class="bg-indigo-50 p-2 flex flex-col md:flex-row justify-between items-center border-b-2 border-indigo-100 gap-2">
+                    <div class="flex items-center gap-2 text-sm text-indigo-800 font-semibold px-2">
+                        <span class="text-2xl">🐻</span> <span id="npc-text">Ayo, kamu pasti bisa!</span>
+                    </div>
+                    <div class="relative w-full md:w-64">
+                        <input type="text" id="search-q" placeholder="Cari kata kunci soal..." class="w-full px-3 py-1 rounded-full text-xs border-2 border-indigo-200 focus:outline-none focus:border-indigo-400" onkeyup="searchQuestion()">
+                        <i class="fa-solid fa-search absolute right-3 top-1.5 text-indigo-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Question Area -->
+                <div class="flex-grow p-4 md:p-6 flex flex-col justify-start bg-gray-50 overflow-y-auto">
+                    
+                    <!-- Powerups -->
+                    <div class="flex justify-end mb-2">
+                        <button onclick="useHint()" id="btn-hint" class="bg-yellow-300 hover:bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-yellow-500 flex items-center gap-1 transition">
+                            <i class="fa-solid fa-lightbulb"></i> Bantuan 50:50 (50 Koin)
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl shadow-md border-2 border-gray-100 mb-4 text-center relative">
+                        <span id="q-type" class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold border border-purple-200 uppercase shadow-sm">HOTS</span>
+                        <h2 id="q-text" class="text-xl md:text-2xl font-bold text-gray-800 leading-snug mt-2">
+                            Pertanyaan akan muncul di sini?
+                        </h2>
+                    </div>
+
+                    <!-- Answers Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="answers-container">
+                        <!-- Buttons injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: FEEDBACK SCREEN (Instant Feedback) -->
+            <div id="screen-feedback" class="hide p-6 md:p-8 flex flex-col items-center justify-center text-center min-h-[400px]">
+                <div id="feedback-icon" class="text-7xl mb-4 drop-shadow-xl animate-pop">⭐</div>
+                <h2 id="feedback-title" class="text-3xl font-heading mb-2 text-gray-800">Benar!</h2>
+                
+                <div class="flex gap-4 mb-6">
+                    <div id="feedback-xp" class="text-xl text-orange-500 font-bold bg-orange-100 px-4 py-1 rounded-full border border-orange-200 hidden">+100 XP</div>
+                    <div id="feedback-coins" class="text-xl text-yellow-600 font-bold bg-yellow-100 px-4 py-1 rounded-full border border-yellow-300 hidden">+10 Koin</div>
+                </div>
+
+                <div class="bg-white border-2 border-indigo-100 p-4 rounded-xl text-gray-700 mb-6 max-w-lg shadow-sm">
+                    <div class="flex items-start gap-3 text-left">
+                        <div class="text-3xl">🐰</div>
+                        <div>
+                            <p class="text-xs text-indigo-500 font-bold uppercase mb-1">Penjelasan Buni Kelinci:</p>
+                            <p id="feedback-explanation" class="text-sm font-semibold">Penjelasan muncul disini</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="nextStep()" class="btn-3d bg-indigo-500 hover:bg-indigo-600 text-white text-lg font-heading py-3 px-10 rounded-full shadow-[0_5px_0_#4338ca]">
+                    Lanjut <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- SECTION 5: LEADERBOARD (Social/Co-op simulation) -->
+            <div id="screen-leaderboard" class="hide p-6 md:p-8 flex flex-col min-h-[400px]">
+                <h2 class="text-3xl text-center text-indigo-600 font-heading mb-2"><i class="fa-solid fa-trophy text-yellow-400"></i> Papan Peringkat</h2>
+                <p class="text-center text-gray-500 text-sm mb-6">Bersaing sehat dengan teman sekelas!</p>
+                
+                <div id="leaderboard-list" class="flex flex-col gap-2 flex-grow overflow-y-auto max-h-[250px] pr-2">
+                    <!-- Leaderboard items injected via JS -->
+                </div>
+                
+                <button onclick="proceedFromLeaderboard()" class="btn-3d bg-green-500 hover:bg-green-600 text-white text-lg font-heading py-3 px-8 rounded-full shadow-[0_5px_0_#16a34a] mt-6 mx-auto w-full max-w-xs">
+                    Lanjut ke Soal Berikutnya
+                </button>
+            </div>
+
+            <!-- SECTION 6: END SCREEN & PROGRESS TRACKER -->
+            <div id="screen-end" class="hide p-6 md:p-8 flex flex-col items-center text-center overflow-y-auto max-h-[90vh]">
+                <div class="text-6xl mb-2 animate-bounce">🏆</div>
+                <h2 class="text-3xl text-pink-500 font-heading mb-1">Misi Selesai!</h2>
+                <p class="text-md text-gray-600 mb-6">Luar biasa <span id="end-name" class="font-bold text-indigo-600">Nama</span>, kamu berhasil membantu Buni Kelinci menjaga Bumi kita!</p>
+                
+                <!-- Progress Dashboard -->
+                <div class="w-full max-w-lg bg-white border-2 border-indigo-100 rounded-2xl p-4 shadow-md mb-6">
+                    <h3 class="font-bold text-indigo-800 border-b border-indigo-50 pb-2 mb-3"><i class="fa-solid fa-chart-pie"></i> Dasbor Kemajuan Belajar</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                            <div class="text-xs text-gray-500 uppercase font-bold">Total XP</div>
+                            <div id="end-xp" class="text-2xl font-heading text-orange-500">0</div>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                            <div class="text-xs text-gray-500 uppercase font-bold">Total Koin</div>
+                            <div id="end-coins" class="text-2xl font-heading text-yellow-500">0</div>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                            <div class="text-xs text-gray-500 uppercase font-bold">Level Akhir</div>
+                            <div id="end-level" class="text-2xl font-heading text-purple-500">1</div>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                            <div class="text-xs text-gray-500 uppercase font-bold">Akurasi</div>
+                            <div id="end-accuracy" class="text-2xl font-heading text-green-500">0%</div>
+                        </div>
+                    </div>
+
+                    <!-- Badges Earned -->
+                    <div class="text-left">
+                        <div class="text-xs text-gray-500 uppercase font-bold mb-2">Lencana Diperoleh:</div>
+                        <div id="badges-container" class="flex flex-wrap gap-2 justify-center">
+                            <!-- Badges injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-3 w-full justify-center">
+                    <button onclick="location.reload()" class="btn-3d bg-yellow-400 hover:bg-yellow-500 text-yellow-900 text-lg font-heading py-3 px-6 rounded-full shadow-[0_5px_0_#ca8a04]">
+                        Main Lagi <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                    <!-- Simulated Share Feature -->
+                    <button onclick="shareResult()" class="btn-3d bg-blue-400 hover:bg-blue-500 text-white text-lg font-heading py-3 px-6 rounded-full shadow-[0_5px_0_#3b82f6]">
+                        Bagikan Rapor <i class="fa-solid fa-share-nodes"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Message Box / Modal -->
+    <div id="msg-box" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-sm w-full text-center border-4 border-pink-300 transform scale-100 transition-transform">
+            <div class="text-5xl mb-2" id="msg-icon">⚠️</div>
+            <h3 class="text-2xl font-heading text-pink-500 mb-2" id="msg-title">Oops!</h3>
+            <p id="msg-text" class="text-gray-600 font-semibold mb-6">Pesan error</p>
+            <button onclick="closeMsg()" class="btn-3d bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-8 rounded-full shadow-[0_4px_0_#ec4899]">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // --- GAME DATA ---
+        const avatars = [
+            { icon: '🐶', name: 'Gogo' }, { icon: '🐱', name: 'Mimi' }, 
+            { icon: '🦊', name: 'Foxy' }, { icon: '🐰', name: 'Buni' }, 
+            { icon: '🐼', name: 'Pando'}, { icon: '🐨', name: 'Koko' }
+        ];
+
+        // 25 Questions (Progressive Difficulty: LOTS -> MOTS -> HOTS) untuk BAB Teks Eksplanasi & Lingkungan
+        const questions = [
+            // Level 1-8: LOTS (Pemahaman Dasar)
+            {
+                q: "Apa yang dimaksud dengan teks eksplanasi?", type: "LOTS",
+                options: [
+                    { text: "Teks yang menceritakan imajinasi atau fiksi", correct: false }, 
+                    { text: "Teks yang menjelaskan proses terjadinya suatu fenomena", correct: true },
+                    { text: "Teks petunjuk memasak atau membuat sesuatu", correct: false }, 
+                    { text: "Teks berisi puisi keindahan alam", correct: false }
+                ],
+                exp: "Teks eksplanasi adalah teks yang menjelaskan bagaimana dan mengapa suatu peristiwa/fenomena terjadi secara ilmiah dan logis."
+            },
+            {
+                q: "Apa tujuan utama penulisan teks eksplanasi?", type: "LOTS",
+                options: [
+                    { text: "Menghibur pembaca dengan cerita seru", correct: false }, 
+                    { text: "Mengajak orang untuk membeli barang", correct: false },
+                    { text: "Memberikan informasi berupa proses sebab-akibat secara jelas", correct: true }, 
+                    { text: "Memberi kritikan tajam kepada pemerintah", correct: false }
+                ],
+                exp: "Tujuan utamanya adalah menyajikan informasi yang objektif, akurat, dan faktual mengenai rentetan suatu peristiwa."
+            },
+            {
+                q: "Struktur teks eksplanasi yang berada di bagian paling awal dinamakan...", type: "LOTS",
+                options: [
+                    { text: "Pernyataan Umum", correct: true }, 
+                    { text: "Deretan Penjelas", correct: false },
+                    { text: "Kesimpulan", correct: false }, 
+                    { text: "Interpretasi", correct: false }
+                ],
+                exp: "Pernyataan umum merupakan pengenalan topik yang akan dibahas sebelum masuk ke penjabaran yang lebih detail."
+            },
+            {
+                q: "Bagian isi dari teks eksplanasi yang merinci kronologi 'mengapa' dan 'bagaimana' disebut...", type: "LOTS",
+                options: [
+                    { text: "Interpretasi", correct: false }, 
+                    { text: "Deretan Penjelas", correct: true },
+                    { text: "Pernyataan Umum", correct: false }, 
+                    { text: "Koda atau Penutup", correct: false }
+                ],
+                exp: "Deretan penjelas berisi paragraf-paragraf yang menguraikan sebab dan akibat terjadinya peristiwa secara berurutan."
+            },
+            {
+                q: "Apa pengertian dasar dari perubahan iklim (climate change)?", type: "LOTS",
+                options: [
+                    { text: "Pergantian cuaca yang terjadi dari siang ke malam", correct: false }, 
+                    { text: "Perubahan suhu dan pola cuaca bumi dalam jangka waktu yang sangat panjang", correct: true },
+                    { text: "Cuaca mendung sebelum turun hujan lebat", correct: false }, 
+                    { text: "Fenomena pergantian musim hujan dan kemarau saja", correct: false }
+                ],
+                exp: "Perubahan iklim merujuk pada pergeseran jangka panjang pada suhu rata-rata global dan pola cuaca dunia (sering dikaitkan dengan pemanasan global)."
+            },
+            {
+                q: "Manakah di bawah ini yang merupakan kata penghubung (konjungsi) urutan waktu?", type: "LOTS",
+                options: [
+                    { text: "Karena, sebab", correct: false }, 
+                    { text: "Atau, dan", correct: false },
+                    { text: "Kemudian, selanjutnya", correct: true }, 
+                    { text: "Walaupun, tetapi", correct: false }
+                ],
+                exp: "Kata 'kemudian', 'lalu', dan 'selanjutnya' menandakan kelanjutan waktu dalam suatu proses."
+            },
+            {
+                q: "Manakah yang merupakan kelompok kata penghubung sebab-akibat?", type: "LOTS",
+                options: [
+                    { text: "Sehingga, oleh karena itu", correct: true }, 
+                    { text: "Pertama, mula-mula", correct: false },
+                    { text: "Dan, serta, atau", correct: false }, 
+                    { text: "Akhirnya, setelah itu", correct: false }
+                ],
+                exp: "Kata 'sehingga', 'karena', dan 'oleh karena itu' dipakai untuk mengaitkan sebuah tindakan dengan akibatnya."
+            },
+            {
+                q: "Bagian paling akhir (penutup) pada teks eksplanasi yang memuat ringkasan atau opini singkat penulis disebut...", type: "LOTS",
+                options: [
+                    { text: "Pendahuluan", correct: false }, 
+                    { text: "Daftar Pustaka", correct: false },
+                    { text: "Interpretasi", correct: true }, 
+                    { text: "Deretan Penjelas", correct: false }
+                ],
+                exp: "Interpretasi adalah bagian penutup di mana penulis dapat menyampaikan pandangan pribadinya terkait materi yang dibahas."
+            },
+
+            // Level 9-17: MOTS (Penerapan)
+            {
+                q: "\"Bumi semakin memanas ___ banyaknya gas emisi karbon di udara.\" Kata penghubung yang tepat untuk mengisi titik-titik tersebut adalah...", type: "MOTS",
+                options: [
+                    { text: "Meskipun", correct: false }, 
+                    { text: "Akibat / karena", correct: true },
+                    { text: "Lalu", correct: false }, 
+                    { text: "Namun", correct: false }
+                ],
+                exp: "Kalimat tersebut menjelaskan alasan/penyebab, sehingga konjungsi yang tepat adalah kausalitas ('karena' atau 'akibat')."
+            },
+            {
+                q: "Perhatikan urutan berikut: (1) Es di kutub mencair, (2) Suhu global bumi meningkat, (3) Permukaan laut naik, memicu banjir. Urutan sebab-akibat yang benar adalah...", type: "MOTS",
+                options: [
+                    { text: "1 - 2 - 3", correct: false }, 
+                    { text: "2 - 1 - 3", correct: true },
+                    { text: "3 - 2 - 1", correct: false }, 
+                    { text: "2 - 3 - 1", correct: false }
+                ],
+                exp: "Suhu bumi meningkat (sebab utama), menyebabkan es mencair, lalu berdampak membuat permukaan air laut naik."
+            },
+            {
+                q: "Manakah dari kalimat berikut yang paling tepat dijadikan paragraf 'Pernyataan Umum'?", type: "MOTS",
+                options: [
+                    { text: "Perubahan iklim adalah pergeseran suhu cuaca global dalam jangka waktu lama yang berdampak pada kelangsungan hidup makhluk bumi.", correct: true }, 
+                    { text: "Akibatnya, banyak pulau kecil yang terancam tenggelam.", correct: false },
+                    { text: "Selanjutnya, gas karbon menjebak panas di atmosfer bumi.", correct: false }, 
+                    { text: "Oleh karena itu, mari kita kurangi pemakaian plastik.", correct: false }
+                ],
+                exp: "Pernyataan umum sifatnya mendefinisikan dan memperkenalkan topik sebelum menjabarkan akibat atau rinciannya."
+            },
+            {
+                q: "\"Pertama, kumpulkan botol bekas. Selanjutnya, bersihkan dan potong menjadi dua bagian. Akhirnya, ubah menjadi pot tanaman hias.\" Paragraf ini sarat dengan penggunaan konjungsi...", type: "MOTS",
+                options: [
+                    { text: "Sebab-akibat", correct: false }, 
+                    { text: "Pertentangan makna", correct: false },
+                    { text: "Urutan peristiwa (Waktu)", correct: true }, 
+                    { text: "Pemilihan", correct: false }
+                ],
+                exp: "Kata 'pertama', 'selanjutnya', dan 'akhirnya' merupakan ciri khas konjungsi kronologis/waktu."
+            },
+            {
+                q: "Sebagai bentuk aksi nyata 'anak yang mengubah dunia', tindakan kecil mana yang berdampak langsung mengurangi sampah plastik harianmu?", type: "MOTS",
+                options: [
+                    { text: "Membeli minuman kemasan gelas setiap hari", correct: false }, 
+                    { text: "Membawa botol minum (tumbler) sendiri dari rumah", correct: true },
+                    { text: "Membakar sampah daun di halaman", correct: false }, 
+                    { text: "Membiarkan lampu kelas terus menyala", correct: false }
+                ],
+                exp: "Membawa tumbler bisa secara nyata mengurangi sampah botol plastik sekali pakai di sekolah."
+            },
+            {
+                q: "Kalimat sebab-akibat: \"Hutan yang gundul dan terus-menerus ditebang akan menyebabkan...\"", type: "MOTS",
+                options: [
+                    { text: "Pepohonan menjadi tumbuh lebih subur", correct: false }, 
+                    { text: "Banjir dan tanah longsor saat hujan turun deras", correct: true },
+                    { text: "Satwa liar memiliki lebih banyak tempat bermain", correct: false }, 
+                    { text: "Udara pegunungan menjadi sangat sejuk", correct: false }
+                ],
+                exp: "Akar pohon di hutan berfungsi menyerap dan menahan air. Hutan gundul tidak bisa lagi menahan air sehingga memicu banjir dan longsor."
+            },
+            {
+                q: "Selain fenomena alam seperti gempa, teks eksplanasi juga bisa membahas fenomena sosial. Contoh judul teks eksplanasi sosial adalah...", type: "MOTS",
+                options: [
+                    { text: "Cara Memasak Nasi Goreng Spesial", correct: false }, 
+                    { text: "Dongeng Terjadinya Gunung Tangkuban Perahu", correct: false },
+                    { text: "Penyebab Terjadinya Kemiskinan dan Pengangguran di Perkotaan", correct: true }, 
+                    { text: "Pantun Nasehat Menjaga Lingkungan", correct: false }
+                ],
+                exp: "Teks eksplanasi sosial menjelaskan bagaimana dan mengapa suatu permasalahan di masyarakat terbentuk (contoh: kemiskinan, kenakalan remaja, dsb)."
+            },
+            {
+                q: "\"Oleh karena itu, mari kita matikan listrik jika tidak digunakan untuk mengurangi pembakaran batu bara.\" Kalimat ajakan ini cocok ditempatkan pada bagian...", type: "MOTS",
+                options: [
+                    { text: "Pernyataan Umum", correct: false }, 
+                    { text: "Interpretasi (Penutup/Kesimpulan)", correct: true },
+                    { text: "Deretan Penjelas Paragraf Pertama", correct: false }, 
+                    { text: "Glosarium", correct: false }
+                ],
+                exp: "Kalimat penutup berupa harapan atau ajakan merupakan opini penulis yang lazim ditemukan pada struktur 'Interpretasi'."
+            },
+            {
+                q: "Jika kamu merangkum proses daur ulang kertas, konjungsi waktu apa yang cocok dipakai dalam teksmu?", type: "MOTS",
+                options: [
+                    { text: "Karena, akibatnya, sehingga", correct: false }, 
+                    { text: "Meskipun, tetapi, namun", correct: false },
+                    { text: "Mula-mula, kemudian, setelah itu", correct: true }, 
+                    { text: "Dan, sedangkan, atau", correct: false }
+                ],
+                exp: "Proses daur ulang melibatkan tahap demi tahap (waktu), maka butuh konjungsi urutan peristiwa seperti mula-mula dan kemudian."
+            },
+
+            // Level 18-25: HOTS (Analisis & Evaluasi)
+            {
+                q: "Perhatikan teks: (1) Hujan deras semalaman. (2) Saluran air penuh tumpukan sampah plastik. (3) Air tidak bisa mengalir dan meluap. (4) Lingkungan sekolah kebanjiran. Susunan sebab-akibat di atas mengajarkan kita bahwa...", type: "HOTS",
+                options: [
+                    { text: "Banjir tidak ada kaitannya dengan sampah", correct: false }, 
+                    { text: "Hujan pasti selalu membawa bencana", correct: false },
+                    { text: "Tindakan kecil membuang sampah sembarangan akan memicu rangkaian bencana besar di kemudian hari", correct: true }, 
+                    { text: "Sekolah sebaiknya tidak dibangun di daerah hujan", correct: false }
+                ],
+                exp: "Analisisnya: Kebiasaan membuang sampah (penyebab buatan manusia) akan menyumbat alam (hujan) dan akhirnya merugikan manusia itu sendiri."
+            },
+            {
+                q: "Mengapa kampanye menghemat pemakaian energi (listrik) yang dilakukan anak-anak sangat berdampak terhadap perlawanan krisis iklim global?", type: "HOTS",
+                options: [
+                    { text: "Agar tagihan listrik orang tua menjadi murah", correct: false }, 
+                    { text: "Karena listrik bisa habis dalam semalam", correct: false },
+                    { text: "Mayoritas listrik masih dihasilkan dari pembakaran fosil penyumbang emisi karbon; hemat listrik = menekan laju pemanasan global", correct: true }, 
+                    { text: "Supaya anak-anak belajar di dalam kegelapan", correct: false }
+                ],
+                exp: "Banyak pembangkit listrik menggunakan batu bara/gas yang melepas polusi ke langit. Mengurangi pemakaian listrik berarti menurunkan jumlah polusi tersebut."
+            },
+            {
+                q: "Apa perbedaan paling mendasar antara Teks Eksplanasi tentang 'Tsunami' dengan Cerita Legenda tentang 'Tsunami'?", type: "HOTS",
+                options: [
+                    { text: "Teks eksplanasi lebih panjang dari legenda", correct: false }, 
+                    { text: "Teks eksplanasi berlandaskan fakta ilmu pengetahuan (lempeng tektonik), sedangkan legenda berlandaskan mitos/fiksi", correct: true },
+                    { text: "Teks eksplanasi bahasanya sulit dibaca", correct: false }, 
+                    { text: "Legenda memiliki struktur pernyataan umum", correct: false }
+                ],
+                exp: "Eksplanasi itu ilmiah dan faktual (menjelaskan lempeng bumi), sementara legenda adalah cerita fiktif turun-temurun."
+            },
+            {
+                q: "Kamu melihat seorang warga membuang sampah ke sungai. Sebagai pahlawan lingkungan, aksi yang mencontoh 'anak pengubah dunia' adalah...", type: "HOTS",
+                options: [
+                    { text: "Membiarkan saja karena sungai itu bukan milikmu", correct: false }, 
+                    { text: "Marah-marah dan memviralkan warga tersebut", correct: false },
+                    { text: "Menegur dengan sopan dan memberi penjelasan mengenai dampak banjir dari sampah tersebut", correct: true }, 
+                    { text: "Ikut membuang sampah karena melihat ada temannya", correct: false }
+                ],
+                exp: "Memberikan pengertian (edukasi) sebab-akibat dengan cara persuasif yang baik adalah senjata terkuat agen perubahan."
+            },
+            {
+                q: "Budi ingin menulis teks eksplanasi berjudul 'Mengapa Es Kutub Mencair?'. Ide pokok yang paling tepat untuk bagian 'Deretan Penjelas' adalah...", type: "HOTS",
+                options: [
+                    { text: "Keluh kesah Budi tentang udara kota yang panas", correct: false }, 
+                    { text: "Sejarah penemuan benua Antartika oleh para ilmuwan", correct: false },
+                    { text: "Proses menumpuknya gas rumah kaca yang memerangkap panas matahari sehingga menaikkan suhu bumi bertahap", correct: true }, 
+                    { text: "Himbauan agar semua orang pindah ke daerah kutub", correct: false }
+                ],
+                exp: "Deretan penjelas harus menjawab mekanisme ilmiahnya, yaitu efek rumah kaca yang memerangkap panas."
+            },
+            {
+                q: "Manakah kalimat berikut yang menggambarkan struktur kausalitas (sebab-akibat) berantai (kompleks)?", type: "HOTS",
+                options: [
+                    { text: "Adik menangis karena es krimnya jatuh.", correct: false }, 
+                    { text: "Kemarau panjang terjadi mulai bulan Mei hingga Oktober.", correct: false },
+                    { text: "Asap pabrik mempertebal gas rumah kaca, yang memicu kenaikan suhu bumi, sehingga berujung pada mencairnya es kutub utara.", correct: true }, 
+                    { text: "Kemarin malam turun hujan yang sangat lebat dan disertai petir.", correct: false }
+                ],
+                exp: "Ada proses berantai: Asap (sebab 1) -> Gas menebal (akibat 1/sebab 2) -> Suhu naik (akibat 2/sebab 3) -> Es mencair (akibat akhir)."
+            },
+            {
+                q: "Evaluasilah teks berikut: 'Aku sedih sekali kalau banjir datang. Airnya coklat kotor dan membuatku takut. Semoga besok tidak banjir lagi.' Mengapa ini BUKAN teks eksplanasi?", type: "HOTS",
+                options: [
+                    { text: "Terlalu pendek", correct: false }, 
+                    { text: "Teks ini bersifat curahan hati (subjektif/opini) dan tidak menguraikan proses ilmiah terjadinya banjir secara logis", correct: true },
+                    { text: "Bahasanya tidak baku", correct: false }, 
+                    { text: "Banjir bukan fenomena alam yang pantas dibahas", correct: false }
+                ],
+                exp: "Teks eksplanasi harus objektif memaparkan informasi faktawi tentang bagaimana proses fenomena itu terbentuk, bukan sekadar opini perasaan."
+            },
+            {
+                q: "Berdasarkan materi Teks Eksplanasi Lingkungan, bagaimana krisis iklim dapat mengancam kepunahan satwa liar seperti Beruang Kutub?", type: "HOTS",
+                options: [
+                    { text: "Perubahan suhu ekstrem merusak habitat berburu alami mereka, sehingga mereka kesulitan mencari makan dan bertahan hidup", correct: true }, 
+                    { text: "Cuaca panas membuat hewan-hewan liar tertidur lebih lama", correct: false },
+                    { text: "Perubahan iklim membuat siklus hewan berkembang biak menjadi super cepat", correct: false }, 
+                    { text: "Beruang kutub sebenarnya tidak terpengaruh, mereka pandai berenang", correct: false }
+                ],
+                exp: "Rantai dampaknya: Iklim berubah -> Es kutub mencair (habitat hilang) -> Sulit memburu anjing laut -> Kelaparan massal -> Ancaman kepunahan."
+            }
+        ];
+
+        const answerStyles = [
+            { bg: "bg-red-500", shadow: "shadow-[0_6px_0_#b91c1c]", shape: "shape-triangle", hover: "hover:bg-red-600" },
+            { bg: "bg-blue-500", shadow: "shadow-[0_6px_0_#1d4ed8]", shape: "shape-diamond", hover: "hover:bg-blue-600" },
+            { bg: "bg-yellow-400", shadow: "shadow-[0_6px_0_#a16207]", shape: "shape-circle", hover: "hover:bg-yellow-500" },
+            { bg: "bg-green-500", shadow: "shadow-[0_6px_0_#15803d]", shape: "shape-square", hover: "hover:bg-green-600" }
+        ];
+
+        // Bots for Leaderboard simulation
+        let players = [
+            { name: "Budi", avatar: "🤖", xp: 0, isBot: true },
+            { name: "Siti", avatar: "👽", xp: 0, isBot: true },
+            { name: "Andi", avatar: "👻", xp: 0, isBot: true },
+            { name: "Rara", avatar: "🧚", xp: 0, isBot: true }
+        ];
+
+        // --- STATE VARIABLES ---
+        let currentQuestion = 0;
+        let pName = "";
+        let pAvatar = "🐶";
+        let xp = 0;
+        let coins = 0;
+        let level = 1;
+        let correctAnswersCount = 0;
+        let hintUsed = false; // per question
+
+        // --- UTILS ---
+        function showScreen(id) {
+            document.querySelectorAll('.hide, div[id^="screen-"]').forEach(el => {
+                if(el.id && el.id.startsWith('screen-')) el.classList.add('hide');
+            });
+            document.getElementById(id).classList.remove('hide');
+        }
+
+        function showMsg(title, text, icon = "⚠️") {
+            document.getElementById('msg-title').innerText = title;
+            document.getElementById('msg-text').innerText = text;
+            document.getElementById('msg-icon').innerText = icon;
+            document.getElementById('msg-box').classList.remove('hidden');
+        }
+
+        function closeMsg() {
+            document.getElementById('msg-box').classList.add('hidden');
+        }
+
+        // --- LOGIC ---
+        function goToAvatar() {
+            const nameInput = document.getElementById('player-name').value.trim();
+            if (!nameInput) {
+                showMsg("Tunggu Dulu!", "Isi nama kamu dulu ya sebelum mulai petualangan!");
+                return;
+            }
+            pName = nameInput;
+            
+            const container = document.getElementById('avatar-container');
+            container.innerHTML = "";
+            avatars.forEach(av => {
+                const btn = document.createElement('button');
+                btn.className = `text-4xl bg-white border-2 border-gray-200 p-3 rounded-2xl transition-all transform hover:scale-110 focus:outline-none flex flex-col items-center gap-1`;
+                btn.innerHTML = `<span>${av.icon}</span><span class="text-xs font-bold text-gray-500">${av.name}</span>`;
+                btn.onclick = () => selectAvatar(av.icon, btn);
+                container.appendChild(btn);
+            });
+            
+            showScreen('screen-avatar');
+        }
+
+        let selectedAvatarBtn = null;
+        function selectAvatar(icon, btn) {
+            pAvatar = icon;
+            if(selectedAvatarBtn) selectedAvatarBtn.classList.remove('ring-4', 'ring-purple-400', 'bg-purple-50');
+            btn.classList.add('ring-4', 'ring-purple-400', 'bg-purple-50');
+            selectedAvatarBtn = btn;
+        }
+
+        function startGame() {
+            if(!selectedAvatarBtn) {
+                showMsg("Pilih Karakter!", "Pilih satu karakter pahlawan lucu dulu yuk!");
+                return;
+            }
+            
+            players.push({ name: pName, avatar: pAvatar, xp: 0, isBot: false });
+            
+            // Initial HUD setup
+            document.getElementById('game-name-display').innerText = pName;
+            document.getElementById('game-avatar-display').innerText = pAvatar;
+            document.getElementById('q-total').innerText = questions.length;
+            updateHUD();
+            
+            currentQuestion = 0;
+            correctAnswersCount = 0;
+            loadQuestion();
+            showScreen('screen-game');
+        }
+
+        function updateHUD() {
+            document.getElementById('game-xp').innerText = xp + " XP";
+            document.getElementById('game-coins').innerText = coins;
+            
+            // Level calculation (Level up every 500 XP)
+            let newLevel = Math.floor(xp / 500) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                document.getElementById('game-level').parentElement.classList.add('animate-levelup');
+                setTimeout(() => document.getElementById('game-level').parentElement.classList.remove('animate-levelup'), 1000);
+            }
+            document.getElementById('game-level').innerText = level;
+
+            // XP Bar progress (modulo 500)
+            let progress = (xp % 500) / 500 * 100;
+            if(xp > 0 && progress === 0) progress = 100; // full bar briefly before level up
+            document.getElementById('xp-bar').style.width = progress + "%";
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            hintUsed = false;
+            document.getElementById('q-current').innerText = currentQuestion + 1;
+            document.getElementById('q-text').innerHTML = q.q; // Allow innerHTML for highlight
+            document.getElementById('search-q').value = "";
+            
+            // Update NPC Text based on difficulty
+            const npcPhrases = {
+                'LOTS': ["Ini pertanyaan dasar, kamu pasti bisa!", "Ingat-ingat lagi definisi utamanya ya!"],
+                'MOTS': ["Coba bayangkan ini terjadi di sekitarmu.", "Penerapan aturan itu penting lho!"],
+                'HOTS': ["Hmm, ini butuh analisis yang tajam!", "Pikirkan baik-baik sebab dan akibatnya!"]
+            };
+            const phrases = npcPhrases[q.type];
+            document.getElementById('npc-text').innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            
+            // Set Badge
+            const qTypeEl = document.getElementById('q-type');
+            qTypeEl.innerText = "Tingkat: " + q.type;
+            if(q.type === 'HOTS') { qTypeEl.className = "absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold border border-red-200 uppercase shadow-sm"; }
+            else if(q.type === 'MOTS') { qTypeEl.className = "absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold border border-yellow-200 uppercase shadow-sm"; }
+            else { qTypeEl.className = "absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 uppercase shadow-sm"; }
+
+            // Render Answers
+            renderAnswers(q.options);
+            
+            // Reset Hint Button
+            const btnHint = document.getElementById('btn-hint');
+            btnHint.disabled = false;
+            btnHint.className = "bg-yellow-300 hover:bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold shadow-sm border border-yellow-500 flex items-center gap-1 transition cursor-pointer";
+        }
+
+        function renderAnswers(optionsList, disableIndexes = []) {
+            const container = document.getElementById('answers-container');
+            container.innerHTML = "";
+            
+            optionsList.forEach((opt, idx) => {
+                const style = answerStyles[idx];
+                const btn = document.createElement('button');
+                
+                if (disableIndexes.includes(idx)) {
+                    // Disabled styling (Hint used)
+                    btn.className = `btn-3d bg-gray-300 rounded-2xl p-3 flex flex-col md:flex-row items-center gap-3 text-gray-500 text-left overflow-hidden min-h-[90px] opacity-50 cursor-not-allowed`;
+                    btn.disabled = true;
+                } else {
+                    // Normal styling
+                    btn.className = `btn-3d ${style.bg} ${style.hover} ${style.shadow} rounded-2xl p-3 flex flex-col md:flex-row items-center gap-3 text-white text-left overflow-hidden min-h-[90px]`;
+                    btn.onclick = () => checkAnswer(opt.correct, btn);
+                }
+                
+                // Shape icon
+                const shapeContainer = document.createElement('div');
+                shapeContainer.className = "flex-shrink-0 flex items-center justify-center w-10 h-10";
+                const shape = document.createElement('div');
+                shape.className = style.shape;
+                shapeContainer.appendChild(shape);
+
+                // Text
+                const textSpan = document.createElement('span');
+                textSpan.className = "text-sm md:text-base font-bold w-full text-center md:text-left drop-shadow-sm leading-tight";
+                textSpan.innerText = opt.text;
+
+                btn.appendChild(shapeContainer);
+                btn.appendChild(textSpan);
+                container.appendChild(btn);
+            });
+        }
+
+        function useHint() {
+            if (hintUsed) return;
+            if (coins < 50) {
+                showMsg("Koin Tidak Cukup!", "Kamu butuh 50 koin untuk menggunakan bantuan 50:50.", "🪙");
+                return;
+            }
+            
+            coins -= 50;
+            hintUsed = true;
+            updateHUD();
+
+            const q = questions[currentQuestion];
+            let wrongIndexes = [];
+            q.options.forEach((opt, idx) => {
+                if (!opt.correct) wrongIndexes.push(idx);
+            });
+            
+            // Randomly pick 2 wrong answers to disable
+            wrongIndexes = wrongIndexes.sort(() => 0.5 - Math.random()).slice(0, 2);
+            
+            renderAnswers(q.options, wrongIndexes);
+
+            // Update button visual
+            const btnHint = document.getElementById('btn-hint');
+            btnHint.disabled = true;
+            btnHint.className = "bg-gray-200 text-gray-400 px-3 py-1 rounded-full text-xs font-bold border border-gray-300 flex items-center gap-1 cursor-not-allowed";
+        }
+
+        function checkAnswer(isCorrect, btn) {
+            // Visual feedback on button press
+            btn.classList.add('active-press');
+            
+            const q = questions[currentQuestion];
+            const fbIcon = document.getElementById('feedback-icon');
+            const fbTitle = document.getElementById('feedback-title');
+            const fbExp = document.getElementById('feedback-explanation');
+            const fbXp = document.getElementById('feedback-xp');
+            const fbCoins = document.getElementById('feedback-coins');
+            
+            // Reset Animation
+            fbIcon.classList.remove('animate-pop');
+            void fbIcon.offsetWidth; 
+            fbIcon.classList.add('animate-pop');
+
+            if (isCorrect) {
+                correctAnswersCount++;
+                let xpGain = q.type === 'HOTS' ? 150 : (q.type === 'MOTS' ? 100 : 50);
+                let coinGain = 20;
+                
+                xp += xpGain;
+                coins += coinGain;
+                updateHUD();
+                
+                let me = players.find(p => !p.isBot);
+                if(me) me.xp = xp;
+
+                fbIcon.innerHTML = '✨';
+                fbTitle.innerText = "Tepat Sekali!";
+                fbTitle.className = "text-3xl font-heading mb-2 text-green-500";
+                
+                fbXp.innerText = `+${xpGain} XP`;
+                fbXp.classList.remove('hidden');
+                fbCoins.innerText = `+${coinGain} Koin`;
+                fbCoins.classList.remove('hidden');
+            } else {
+                fbIcon.innerHTML = '😅';
+                fbTitle.innerText = "Ups, Kurang Tepat!";
+                fbTitle.className = "text-3xl font-heading mb-2 text-red-500";
+                fbXp.classList.add('hidden');
+                fbCoins.classList.add('hidden');
+            }
+            
+            fbExp.innerText = q.exp;
+            
+            // Simulate bots playing
+            players.forEach(p => {
+                if(p.isBot) {
+                    let chance = q.type === 'HOTS' ? 0.4 : 0.7; 
+                    if(Math.random() < chance) p.xp += (q.type === 'HOTS' ? 150 : 50);
+                }
+            });
+
+            setTimeout(() => showScreen('screen-feedback'), 200); // slight delay for button press feel
+        }
+
+        function nextStep() {
+            // Every 5 questions show leaderboard, else skip to next question
+            if ((currentQuestion + 1) % 5 === 0 && currentQuestion < questions.length - 1) {
+                renderLeaderboard();
+                showScreen('screen-leaderboard');
+            } else {
+                proceedToNext();
+            }
+        }
+
+        function proceedFromLeaderboard() {
+            proceedToNext();
+        }
+
+        function proceedToNext() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+                showScreen('screen-game');
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('end-name').innerText = pName;
+            document.getElementById('end-xp').innerText = xp;
+            document.getElementById('end-coins').innerText = coins;
+            document.getElementById('end-level').innerText = level;
+            
+            let accuracy = Math.round((correctAnswersCount / questions.length) * 100);
+            document.getElementById('end-accuracy').innerText = accuracy + "%";
+
+            // Generate Badges based on performance
+            const badgesContainer = document.getElementById('badges-container');
+            badgesContainer.innerHTML = "";
+            let badges = [];
+            
+            if (accuracy >= 50) badges.push({ icon: '🥉', name: 'Pemula Baik' });
+            if (accuracy >= 80) badges.push({ icon: '🥈', name: 'Pelajar Giat' });
+            if (accuracy === 100) badges.push({ icon: '🥇', name: 'Master Matematika' });
+            if (hintUsed === false && accuracy >= 80) badges.push({ icon: '🧠', name: 'Si Jenius' });
+            
+            if (badges.length === 0) badges.push({ icon: '🌱', name: 'Tunas Berkembang' });
+
+            badges.forEach(b => {
+                badgesContainer.innerHTML += `
+                    <div class="flex flex-col items-center bg-yellow-50 border border-yellow-200 rounded-lg p-2 w-24 shadow-sm">
+                        <div class="text-3xl">${b.icon}</div>
+                        <div class="text-[10px] font-bold text-center mt-1 text-yellow-800 leading-tight">${b.name}</div>
+                    </div>
+                `;
+            });
+
+            showScreen('screen-end');
+        }
+
+        function renderLeaderboard() {
+            players.sort((a, b) => b.xp - a.xp);
+            
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = "";
+            
+            players.forEach((p, idx) => {
+                const item = document.createElement('div');
+                let bg = p.isBot ? "bg-white border-gray-100" : "bg-indigo-50 border-indigo-300 ring-2 ring-indigo-200";
+                let delay = idx * 0.1;
+                
+                item.className = `flex items-center justify-between p-3 rounded-xl border-2 shadow-sm slide-up ${bg}`;
+                item.style.animationDelay = `${delay}s`;
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="font-heading text-lg ${idx < 3 ? 'text-yellow-500' : 'text-gray-400'} w-6 text-center">#${idx + 1}</div>
+                        <div class="text-2xl bg-gray-100 rounded-full w-10 h-10 flex items-center justify-center border border-gray-200">${p.avatar}</div>
+                        <div class="font-bold text-sm text-gray-700">${p.name} ${!p.isBot ? '<span class="text-xs text-indigo-500">(Kamu)</span>' : ''}</div>
+                    </div>
+                    <div class="font-heading text-lg text-indigo-600">${p.xp} XP</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // Feature: Search/Highlight (Requested)
+        function searchQuestion() {
+            const input = document.getElementById('search-q').value.toLowerCase();
+            const textElement = document.getElementById('q-text');
+            const originalText = questions[currentQuestion].q;
+            
+            if (input.trim() === "") {
+                textElement.innerHTML = originalText;
+                return;
+            }
+
+            try {
+                const regex = new RegExp(`(${input})`, 'gi');
+                textElement.innerHTML = originalText.replace(regex, '<mark class="bg-yellow-300 rounded px-1 text-gray-900">$1</mark>');
+            } catch (e) {
+                // Ignore invalid regex from incomplete input
+            }
+        }
+
+        // Feature: Simulate Share
+        function shareResult() {
+            showMsg("Berhasil Dibagikan!", "Rapor kemajuan belajarmu telah dibagikan ke Dashboard Guru (Simulasi). Hebat!", "📤");
+        }
+
+    </script>
+</body>
+</html>
+```
+
+### Penjelasan Pembaruan Fitur yang Ditambahkan:
+1. **20 Soal dengan Kesulitan Bertahap (Progressive Difficulty)**: Soal 1-5 (LOTS/Pemahaman Dasar), 6-12 (MOTS/Penerapan), dan 13-20 (HOTS/Analisis).
+2. **Sistem Gamifikasi (XP, Koin, Leveling)**: 
+   - Pemain mendapatkan **XP** yang akan menaikkan **Level** (bar kuning di bagian atas).
+   - Menjawab benar menghasilkan **Koin**.
+3. **Mekanik Bantuan (Hint System)**: Terdapat tombol **"Bantuan 50:50"** yang membuang 2 jawaban salah. Menggunakannya membutuhkan biaya **50 Koin**. Ini melatih siswa memanajemen sumber daya.
+4. **Karakter Panduan & Narasi**: Ada **Bapak Beruang (NPC)** yang memberikan pengantar cerita di awal dan memberikan kata-kata semangat atau petunjuk sesuai tingkat kesulitan soal di area bermain. Penjelasan di layar umpan balik juga seolah-olah dijelaskan oleh Bapak Beruang.
+5. **Dasbor Kemajuan (Progress Tracker)**: Pada layar akhir permainan, tidak hanya menampilkan skor, tapi menampilkan Total XP, Koin, Akurasi (Persentase), dan **Lencana (Badges)** yang diraih berdasarkan performa.
+6. **Sesi Bermain (Pacing)**: Agar 20 soal tidak terasa melelahkan, Leaderboard (Papan Peringkat) hanya muncul setiap **5 soal sekali** sebagai tempat *check-point* bernapas.
